@@ -1,49 +1,36 @@
-# Criterios de diseño aplicados
+# Diseño geométrico · versión 1.4
 
-Se utilizó [apple-design-skill](https://github.com/dickwu/apple-design-skill/blob/main/SKILL.md) como referencia solicitada. Esta es una aplicación web: se aplican sus principios y fundamentos de accesibilidad, color, tipografía, estructura y redacción; no se fuerza una navegación nativa de iOS o macOS.
+La referencia visual es la imagen aportada por el usuario. Se utiliza su motivo geométrico en la portada y se repiten círculos, cuartos de círculo, bloques de color y franjas en la marca, navegación y encabezados. Se conservan los criterios de claridad, accesibilidad, controles legibles y consistencia del proyecto original, realizado con apple-design-skill.
 
-Referencias consultadas en el repositorio: `hig-lookup.md`, `accessibility.md`, `layout.md`, `typography.md`, `color.md`, `writing.md`, `entering-data.md`, `settings.md` y `charting-data.md`.
+## Paleta
 
-## Propósito
-
-Cada vista ayuda a realizar una parte de la investigación. La medición ocupa una superficie propia, sin reloj, cuenta regresiva, progreso circular ni animación periódica que pueda ayudar a contar. La interfaz usa tipografía de sistema, navegación sencilla y un acento azul para acciones. El símbolo circular del laboratorio se mantiene estático.
-
-## Colores y contraste
-
-Contrastes calculados con luminancia relativa sRGB:
-
-| Uso | Texto / fondo | Contraste |
+| Color | Valor | Uso |
 | --- | --- | --- |
-| Contenido claro | `#172033` / `#ffffff` | 16,27:1 |
-| Texto secundario claro | `#596579` / `#ffffff` | 5,90:1 |
-| Acción principal clara | blanco / `#174ec7` | 7,12:1 |
-| Contenido oscuro | `#f0f3fa` / `#1e2430` | 14,00:1 |
-| Texto secundario oscuro | `#b1bdd0` / `#1e2430` | 8,19:1 |
-| Acción principal oscura | `#111f3c` / `#a8c2ff` | 9,20:1 |
-| Medición sobre fondo suave | `#172033` / `#e7edf8` | 13,84:1 |
+| Azul marino | `#0f2a3d` | Texto, navegación y bordes |
+| Azul | `#21709d` | Enlaces, gráficos y acentos |
+| Coral | `#ff5c5c` | Acciones principales y módulos |
+| Rosa | `#ffb9b9` | Etiquetas y formas |
+| Amarillo | `#ffcb2f` | Selecciones, totales y acentos |
+| Fondo | `#f5f5f5` | Superficie general |
 
-El modo claro u oscuro sigue la preferencia del sistema. Los estados tienen texto, además de color. Los fondos experimentales usan tonos suaves y patrones estáticos que cambian a intervalos irregulares; no contienen destellos rápidos.
+Se adopta una apariencia clara coherente con la referencia. No se cargan fuentes externas. Los estados tienen texto y atributos accesibles; no dependen solo del color.
 
-## Tipografía y estructura
+## Contraste calculado
 
-Base de 17 px, controles normalmente de al menos 46 px de altura y control de medición de 70 px. Los botones de revisión de tablas son secundarios y menores que el control principal. La navegación lateral se transforma en una fila de cuatro momentos en pantallas estrechas. Los formularios pasan de dos o tres columnas a una columna.
+| Texto y fondo | Relación |
+| --- | --- |
+| Marino sobre blanco | 14,80:1 |
+| Marino sobre coral | 4,89:1 |
+| Marino sobre amarillo | 9,75:1 |
+| Marino sobre rosa | 9,09:1 |
+| Azul sobre fondo general | 4,98:1 |
+| Blanco sobre azul | 5,43:1 |
+| Texto secundario sobre blanco | 6,74:1 |
 
-Las tablas conservan sus columnas y permiten desplazamiento horizontal. Los gráficos usan ejes numéricos con marcas: tiempo en segundos y frecuencia absoluta. Las barras guardan la distancia proporcional entre valores; los puntos sobre el eje horizontal señalan frecuencia cero. La tabla correspondiente conserva la alternativa textual.
+## Interacción
 
-La proyección ocupa el ancho disponible y mantiene controles visibles para cambiar de momento, intento y representación. La tarea reduce la navegación al experimento para personas nuevas. El QR se presenta negro sobre blanco, con margen de lectura y enlace visible.
+Los botones principales conservan altura suficiente, foco visible y etiquetas. Las tablas permiten desplazamiento horizontal y los gráficos conservan ejes, marcas y descripciones textuales. Los formularios y la portada se adaptan mediante las reglas responsive existentes y los ajustes del nuevo tema.
 
-## Accesibilidad y control
+La ilustración es decorativa y no añade información al lector de pantalla. No se añaden animaciones periódicas. El área de medición conserva los fondos experimentales configurados; la decoración de portada no entra en el cronómetro.
 
-- Navegación por teclado, foco visible y enlace para saltar al contenido.
-- Campos con etiquetas; botones que describen su acción.
-- Gráficos con una descripción textual de valores y frecuencias.
-- Preferencias de movimiento reducido y mayor contraste.
-- Modal de medición con cancelación y manejo de Escape; modalidad de mantener y soltar mediante espacio o Enter.
-- El tiempo medido se guarda separado del redondeo para el análisis.
-- Los resultados ocultos no se entregan al navegador del estudiante mediante los endpoints de resultados o reintento.
-
-Las decisiones sobre el símbolo circular, el acento azul y los fondos suaves son criterio de diseño para esta actividad, no reglas obligatorias de Apple.
-
-## Límite de la revisión
-
-Se verificaron valores de contraste, reglas responsive, sintaxis y generación de las vistas. Se inspeccionó la demostración en un navegador real para los cambios del segundo día. No se realizó una prueba con lector de pantalla ni con todos los tamaños y dispositivos previstos. El piloto descrito en la guía debe comprobar la presentación final en los dispositivos de la clase.
+Los resultados de la tarea por intento se reservan al docente. En la vista estudiantil se conservan las instrucciones, el enlace y el QR para participar.

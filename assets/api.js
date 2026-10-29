@@ -74,7 +74,7 @@ var ThirtyAPI = (function () {
           const own=db.attempts.filter(x=>x.sessionId===s.id&&x.participantId===r.id),c=s.config,pc=C.participantConfig(c,r.source);
           if(action==='studentSnapshot') {
             const reveal=C.feedbackAllowed(pc,own),scoped=db.attempts.filter(x=>x.sessionId===s.id&&x.status==='valid'&&(c.studentScope==='all'||(c.studentScope==='group'&&x.group===r.group)||(c.studentScope==='own'&&x.participantId===r.id)));
-            const analysis=r.source==='home'?[]:C.analysisViews(scoped,c),homeAnalysis=r.source==='home'||c.unlock<4||c.showTaskResults===false?[]:C.analysisViews(scoped.filter(x=>x.source==='home'),{...c,showRaw:false,showTable:true,showChart:true,showStats:false,showAutoMean:false});
+            const analysis=r.source==='home'?[]:C.analysisViews(scoped,c),homeAnalysis=[];
             data={session:s,participant:this.clean(r),feedbackVisible:reveal,own:own.map(x=>{const z={id:x.id,status:x.status,consumed:x.status==='valid'||(r.source==='home'&&x.elapsedMs>0),trial:x.trial,mode:x.mode,background:x.background,reason:x.reason,configVersion:x.configVersion,target:x.target};if(reveal&&x.elapsedMs!=null)z.seconds=C.round(x.elapsedMs/1000,c.precision);return z;}),answers:r.source==='home'?[]:db.answers.filter(x=>x.sessionId===s.id&&x.participantId===r.id),analysis,homeAnalysis};
           } else if(action==='startAttempt') {
             C.assert(c.collectionOpen&&c.unlock>=2,'La recolección está cerrada.');C.assert(r.source!=='home'||c.allowHome,'La tarea está cerrada.');

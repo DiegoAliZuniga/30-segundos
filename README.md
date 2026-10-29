@@ -6,7 +6,7 @@ La interfaz está preparada para GitHub Pages. El registro compartido y la autor
 
 ## Corrección centrada en el segundo día
 
-La versión 1.3 aplica las últimas correcciones del día 2 del planeamiento adjunto: repaso de 15 minutos, investigación de 55 minutos y cierre/tarea de 15 minutos. Los cuatro momentos GAISE II pertenecen a la investigación. Consulta [el detalle de los ajustes](docs/AJUSTES_DIA_2.md).
+La versión 1.4 aplica las últimas correcciones del día 2 del planeamiento adjunto: repaso de 15 minutos, investigación de 55 minutos y cierre/tarea de 15 minutos. Los cuatro momentos GAISE II pertenecen a la investigación. Consulta [el detalle de los ajustes](docs/AJUSTES_DIA_2.md).
 
 ## Qué incluye
 
@@ -23,7 +23,8 @@ La versión 1.3 aplica las últimas correcciones del día 2 del planeamiento adj
 - Gráficos SVG con ejes y marcas numéricas, incluyendo frecuencias cero; tablas y gráficos por primer intento, segundo intento o todos.
 - Proyección docente de los cuatro momentos con habilitación progresiva de secciones y representaciones.
 - Comparación por grupo, género, intento, procedencia, modalidad y fondo; comparación pareada de intentos 1 y 2.
-- Tarea reducida al experimento, con dos intentos por persona nueva, enlace y QR local; análisis de la tarea por intento en Interpretar.
+- Tarea reducida al experimento, con dos intentos por persona nueva, enlace y QR local; desglose de tarea por intento exclusivo de la proyección docente.
+- Identidad visual geométrica con la paleta aportada: azul marino, azul, coral, rosa y amarillo.
 - Acceso de varios docentes por ID/clave y, tras configurar OAuth, por Google con verificación de firma y lista de cuentas autorizadas.
 - Revisión de intentos sin borrar el tiempo original, auditoría, exportaciones CSV y respaldos JSON.
 - Demostración local aislada del servicio real y cola local de mediciones pendientes de confirmación.
@@ -34,7 +35,7 @@ Sigue **[docs/GUIA.md](docs/GUIA.md)** para crear el repositorio, instalar Apps 
 
 No necesitas instalar paquetes para publicar la interfaz: sube `index.html`, `config.js`, `assets/`, `docs/` y `.nojekyll` a la raíz del repositorio. El código de `apps-script/` debe instalarse en Google Apps Script.
 
-Esta actualización conserva la URL del servicio del repositorio. Para activar las mejoras también debes actualizar `Code.gs` y `Core.gs` en Apps Script y publicar una nueva versión de su implementación existente. Consulta [la guía de actualización](docs/ACTUALIZAR_V1_3.md). La demostración sigue aislada de Google Sheets.
+Esta actualización conserva la URL del servicio del repositorio. Para activar las mejoras también debes actualizar `Code.gs` y `Core.gs` en Apps Script y publicar una nueva versión de su implementación existente. Consulta [la guía de actualización](docs/ACTUALIZAR_V1_4.md). La demostración sigue aislada de Google Sheets.
 
 ## Estructura
 

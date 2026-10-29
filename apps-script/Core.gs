@@ -37,7 +37,7 @@ var ThirtyCore = (function () {
       includeZero: true, showAutoMean: true,
       agreedProtocol: '', sharedAnalysisTrial: '1', sharedAnalysisView: 'raw',
       studentTrials: ['1','2','all'],
-      showTaskResults: true,
+      showTaskResults: false, // Retained for compatibility; homework results are teacher-only.
       target: 30, attempts: 1, maxSeconds: 120, precision: 1,
       toleranceLow: 25, toleranceHigh: 35, feedback: 'teacher',
       resultsReleased: false, showRaw: false, showTable: false,

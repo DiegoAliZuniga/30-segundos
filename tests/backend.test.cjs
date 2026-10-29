@@ -89,10 +89,10 @@ test('Simulación de veinte dispositivos: cuarenta mediciones sin duplicados',()
   const snap=h.call('teacherSnapshot',{token:h.token,sessionId:s.id});assert.equal(snap.participants.length,20);assert.equal(snap.attempts.length,40);assert.equal(new Set(snap.attempts.map(x=>x.id)).size,40);
 });
 test('La tarea permite dos intentos y solo recibe sus propios resultados',()=>{
-  const h=harness(),s=h.create({unlock:4,collectionOpen:true,allowHome:true,showRaw:true,showTable:true,showStats:true}),r=h.register(s,{source:'home',voluntary:true,firstParticipation:true});
+  const h=harness(),s=h.create({unlock:4,collectionOpen:true,allowHome:true,showRaw:true,showTable:true,showStats:true,showTaskResults:true}),r=h.register(s,{source:'home',voluntary:true,firstParticipation:true});
   for(let i=0;i<2;i++){const aid=crypto.randomUUID();h.call('startAttempt',{...r.args,attemptId:aid,mode:'pair'});h.call('finishAttempt',{...r.args,attemptId:aid,elapsedMs:30000+i*1000});}
   assert.throws(()=>h.call('startAttempt',{...r.args,attemptId:crypto.randomUUID(),mode:'pair'}),/permitidos/);const home=h.call('studentSnapshot',r.args);assert.equal(home.own.length,2);assert.deepEqual(home.analysis,[]);assert.deepEqual(home.homeAnalysis,[]);assert.deepEqual(home.answers,[]);
-  const student=h.register(s,{name:'Estudiante'}),snapshot=h.call('studentSnapshot',student.args);assert.equal(snapshot.homeAnalysis.find(v=>v.trial==='1').n,1);assert.equal(snapshot.homeAnalysis.find(v=>v.trial==='2').n,1);assert.equal(snapshot.homeAnalysis.find(v=>v.trial==='all').n,2);
+  const student=h.register(s,{name:'Estudiante'}),snapshot=h.call('studentSnapshot',student.args);assert.deepEqual(snapshot.homeAnalysis,[]);const teacher=h.call('teacherSnapshot',{token:h.token,sessionId:s.id});assert.equal(teacher.attempts.filter(a=>a.source==='home').length,2);
 });
 test('El docente controla qué intento se entrega a los estudiantes y sus filas cero',()=>{
   const h=harness(),s=h.create({unlock:3,collectionOpen:true,attempts:2,showTable:true,studentTrials:['1']}),r=h.register(s);

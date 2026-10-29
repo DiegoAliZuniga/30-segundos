@@ -2,9 +2,9 @@
 
 ## Actualización: segundo día corregido
 
-La versión 1.3 aplica las últimas correcciones del día 2: preguntas previas revisadas, construcción de la tabla antes de las preguntas de análisis, media automática, porcentajes automáticos con la fórmula visible, totales y gráficos con ejes numéricos. La tarea permite dos intentos por persona nueva y muestra únicamente el experimento. El docente dispone de proyección para los cuatro momentos y control de acceso progresivo.
+La versión 1.4 aplica las últimas correcciones del día 2: preguntas previas revisadas, construcción de la tabla antes de las preguntas de análisis, media automática, porcentajes automáticos con la fórmula visible, totales y gráficos con ejes numéricos. La tarea permite dos intentos por persona nueva y muestra únicamente el experimento. El docente dispone de proyección para los cuatro momentos y control de acceso progresivo.
 
-El botón **Preparar tarea del día 2** abre esa modalidad y oculta los tiempos personales y las representaciones generales de Analizar. Los resultados de la tarea se conservan en **Interpretar**, para participantes del aula, con botones de primer intento, segundo intento y todos. Las personas que entran por el enlace de tarea solo reciben sus propios intentos. Las preferencias se pueden revisar en **Configurar**.
+El botón **Preparar tarea del día 2** abre esa modalidad y oculta los tiempos personales y las representaciones generales de Analizar. Los resultados de la tarea por intento se conservan únicamente para el docente, en Proyectar → Interpretar. El estudiantado no ve ese desglose. Las personas que entran por el enlace de tarea solo reciben sus propios intentos. Las preferencias se pueden revisar en **Configurar**.
 
 La identificación de personas repetidas entre dispositivos se apoya en la confirmación de no haber participado antes; no usa reconocimiento automático.
 
@@ -204,8 +204,8 @@ Habilita el momento 4. Pide una conclusión con evidencia y argumentos sobre gen
 2. Si deseas separar los registros, agrega un grupo pertinente antes de las inscripciones nuevas.
 3. Abre **Mostrar QR para la tarea** o usa **Copiar enlace para la tarea**. El enlace lleva el código de sesión y abre directamente el registro de la tarea; no contiene credenciales de participante. El QR se genera en el navegador, sin enviar el enlace a un servicio externo. Para usarlo en otros dispositivos, ábrelo desde la dirección publicada de GitHub Pages.
 4. Cada persona nueva se registra por separado y confirma voluntariedad y primera participación. El género queda opcional. Al entrar, solo ve **Recolectar**, el experimento y sus intentos; no ve los otros momentos ni los resultados colectivos. Después de sus dos intentos, el botón para medir queda deshabilitado y se ofrece **Registrar otra persona**.
-5. En **Interpretar → Tarea: ampliar la investigación**, el grupo del aula puede consultar tabla y gráfico de la tarea con los botones **1.er intento**, **2.º intento** y **Todos los intentos**, cuando el docente tenga habilitada esa información. En Configurar, usa **Mostrar tablas y gráficos de la tarea en Interpretar** e **Intentos visibles para estudiantes**.
-6. En el portal docente y la proyección también están disponibles esas selecciones. La comparación del grupo inicial frente a la muestra ampliada usa el primer intento de cada persona, para no contar a alguien dos veces. Todos los intentos suma mediciones, no personas.
+5. En **Interpretar → Tarea: ampliar la investigación**, el estudiantado conserva la consigna, el enlace y el QR. No se muestra «Resultados de la tarea por intento» ni se entrega ese desglose en la respuesta del servidor.
+6. En la proyección docente → Interpretar están disponibles las tablas y gráficos de la tarea para el primer intento, segundo y todos. La comparación del grupo inicial frente a la muestra ampliada usa el primer intento de cada persona, para no contar a alguien dos veces. Todos los intentos suma mediciones, no personas.
 
 Registrar varias mediciones bajo una sola identidad aumenta intentos, no personas. La muestra ampliada no se vuelve representativa de toda la población por aumentar su tamaño; también importa cómo se seleccionaron las personas.
 

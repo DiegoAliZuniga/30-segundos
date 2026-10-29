@@ -2,7 +2,7 @@
 
 ## Resultado automatizado
 
-**53 pruebas aprobadas** con Node.js. Sin dependencias externas para ejecutar los tests.
+**55 pruebas aprobadas** con Node.js. Sin dependencias externas para ejecutar los tests.
 
 | Área | Comprobación |
 | --- | --- |
@@ -51,3 +51,7 @@ El HTML de demostración es una copia autosuficiente de la interfaz con modo loc
 - Revisión de navegador: protocolo compartido, cambio de representación desde proyección, fórmula y porcentaje automáticos en la tabla del estudiante.
 
 Estas pruebas no miden la latencia del servicio real de Google ni constituyen una prueba de carga de veinte navegadores. Para usar la optimización hay que actualizar también los dos archivos de Apps Script.
+
+## Revisión de la versión 1.4
+
+El desglose de la tarea no se renderiza para estudiantes ni se entrega en `homeAnalysis`, incluso con la opción heredada activada. Se verifica que los registros siguen disponibles para el docente. Se comprobaron los contrastes de la nueva paleta y las referencias locales de CSS, ilustración y favicon. Se inspeccionó la portada y la sección Interpretar en navegador con datos de demostración.

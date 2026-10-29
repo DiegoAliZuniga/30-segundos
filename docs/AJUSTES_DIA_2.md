@@ -1,4 +1,4 @@
-# Ajustes del segundo día · versión 1.3
+# Ajustes del segundo día · versión 1.4
 
 Esta revisión aplica las correcciones más recientes sobre el día 2 de `Planeamiento MA-0024.md`. Conserva los cuatro momentos GAISE II y la organización de repaso, investigación y cierre/tarea. No modifica los días 1 y 3.
 
@@ -32,7 +32,7 @@ Se elimina la pregunta que compara observación/medición e interrogación. Las 
 - **Tarea: ampliar la investigación** ofrece un enlace y un QR generado localmente, sin servicios externos de imágenes.
 - Cada persona nueva realiza **dos intentos**, con confirmaciones de participación voluntaria y de no haber participado antes. Por defecto no se solicitan nombres ni campos adicionales y el género es opcional.
 - Quien abre la tarea solo ve **Recolectar**, el experimento, sus intentos y la opción de registrar otra persona. No recibe las preguntas de los cuatro momentos ni resultados colectivos.
-- El grupo del aula, en Interpretar, dispone de tablas y gráficos de la tarea mediante botones **1.er intento**, **2.º intento** y **Todos los intentos**, bajo control docente.
+- El desglose de la tarea con botones **1.er intento**, **2.º intento** y **Todos los intentos** queda reservado al docente. El estudiantado no ve esa sección.
 - La comparación entre grupo inicial y muestra ampliada usa el primer intento de cada persona. Todos los intentos reúne mediciones repetidas y no equivale al número de personas.
 
 ## Portal docente y proyección
@@ -45,7 +45,7 @@ En Analizar se proyectan datos, tabla, gráfico o medidas del primer intento, se
 
 Las sesiones de la versión anterior reciben las preguntas corregidas y los dos intentos de tarea, sin retirar preguntas personalizadas del docente. Las respuestas guardadas conservan su historial de preguntas y versión. Los códigos internos, condiciones por intento, revisión docente y exportaciones se mantienen.
 
-Se aprobaron **53 pruebas automáticas**. Se comprobó la demostración en navegador, incluido el bloqueo del tercer intento de tarea, el guardado de tablas por intento y la proyección. Dos QR se leyeron con un decodificador independiente. La pantalla completa depende del navegador; la vista de proyección funciona sin ella.
+Se aprobaron **55 pruebas automáticas**. Se comprobó la demostración en navegador, incluido el bloqueo del tercer intento de tarea, el guardado de tablas por intento y la proyección. Dos QR se leyeron con un decodificador independiente. La pantalla completa depende del navegador; la vista de proyección funciona sin ella.
 
 Esta revisión se validó localmente. Para activarla, actualiza GitHub Pages y la implementación existente de Apps Script. Durante las pruebas no se escribieron datos en la hoja proporcionada. La guía incluye el piloto con los dispositivos del grupo.
 
@@ -54,3 +54,7 @@ La confirmación de primera participación no puede detectar automáticamente qu
 ## Corrección adicional de protocolo, resultados y latencia
 
 El protocolo común ahora es editable y puede utilizar las instrucciones de Autónomo. Los porcentajes se muestran automáticamente con su cálculo. Resultados de la sesión, Resultados docente y Proyección comparten la representación y los controles de intentos. Las preferencias se consultan en una petición ligera aproximadamente cada tres segundos; la lectura completa de resultados mantiene una frecuencia menor. La demora real del despliegue depende también de la red y de Google.
+
+## Estética geométrica y vista estudiantil
+
+La versión 1.4 utiliza la paleta y las formas de la imagen aportada. Se aplican a portada, marca, navegación, controles, tablas y proyección. Se elimina el desglose de resultados de tarea de Interpretar para estudiantes, incluso si una sesión anterior conservaba activa esa opción. Las instrucciones, el enlace, el QR y los dos intentos se mantienen.

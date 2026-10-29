@@ -155,8 +155,8 @@ function snapshot_(s,r,isTeacher) {
   var c=s.config;
   var scoped=all.filter(function(x){return x.status==='valid'&&(c.studentScope==='all'||(c.studentScope==='group'&&x.group===r.group)||(c.studentScope==='own'&&x.participantId===r.id));});
   var analysis=r.source==='home'?[]:ThirtyCore.analysisViews(scoped,c);
-  var taskConfig=Object.assign({},c,{showRaw:false,showTable:true,showChart:true,showStats:false,showAutoMean:false});
-  var homeAnalysis=r.source==='home'||c.unlock<4||c.showTaskResults===false?[]:ThirtyCore.analysisViews(scoped.filter(function(x){return x.source==='home';}),taskConfig);
+  // Homework breakdowns are teacher-only; student snapshots never include them.
+  var homeAnalysis=[];
   return {session:sessionPublic_(s),participant:strip_(r),own:own.map(function(x){var a={id:x.id,trial:x.trial,status:x.status,consumed:x.status==='valid'||(r.source==='home'&&x.elapsedMs>0),mode:x.mode,background:x.background,reason:x.reason||'',configVersion:x.configVersion,target:x.target};if(reveal&&x.elapsedMs!=null)a.seconds=ThirtyCore.round(x.elapsedMs/1000,c.precision);return a;}),answers:r.source==='home'?[]:answers.filter(function(x){return x.participantId===r.id;}).map(strip_),analysis:analysis,homeAnalysis:homeAnalysis,feedbackVisible:reveal};
 }
 function start_(p,s,r) {
