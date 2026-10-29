@@ -1,0 +1,20 @@
+<!doctype html><html><head><base target="_top"><meta charset="utf-8"></head><body>
+<script>
+(() => {
+  'use strict';
+  const origin = <?!= parentOrigin ?>;
+  const nonce = <?!= channelNonce ?>;
+  const send = data => window.top.postMessage(Object.assign({channel:'thirty-seconds',nonce},data),origin);
+  window.addEventListener('message', event => {
+    const msg=event.data;
+    if(event.origin!==origin||event.source!==window.top||!msg||msg.channel!=='thirty-seconds'||msg.nonce!==nonce)return;
+    if(msg.type==='hello'){send({type:'ready'});return;}
+    if(msg.type!=='request'||typeof msg.id!=='string')return;
+    google.script.run.withSuccessHandler(result=>send({type:'response',id:msg.id,result}))
+      .withFailureHandler(error=>send({type:'response',id:msg.id,result:{ok:false,error:error.message||'Servicio no disponible.'}}))
+      .dispatch({origin,nonce,action:msg.action,payload:msg.payload});
+  });
+  send({type:'ready'});
+})();
+</script>
+</body></html>
