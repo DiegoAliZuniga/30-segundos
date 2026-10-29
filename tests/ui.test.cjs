@@ -11,7 +11,7 @@ function ui(){
     navigator:{},performance:{now:()=>1000},matchMedia:()=>({matches:false}),history:{replaceState(){}},HTMLFormElement:class{},confirm:()=>true
   });ctx.window=ctx;ctx.addEventListener=()=>{};ctx.scrollTo=()=>{};ctx.THIRTY_CONFIG={demoEnabled:true,appsScriptUrl:''};
   for(const file of ['core.js','charts.js','vendor/qrcode.js','vendor/qrcode_UTF8.js','api.js'])vm.runInContext(fs.readFileSync(path.join(__dirname,'../assets',file),'utf8'),ctx);
-  const app=fs.readFileSync(path.join(__dirname,'../assets/app.js'),'utf8').replace('  initialize();','  globalThis.__ui = {S, api, render, startClock, settingsValues, formValues, exportData, trialButtons, teacherTable, renderProjection, qrPanel};');vm.runInContext(app,ctx);
+  const app=fs.readFileSync(path.join(__dirname,'../assets/app.js'),'utf8').replace('  initialize();','  globalThis.__ui = {S, api, render, startClock, settingsValues, formValues, exportData, trialButtons, teacherTable, renderProjection, qrPanel, watchSession, snapshot, saveConfig};');vm.runInContext(app,ctx);
   return {ctx,el,storage,events,u:ctx.__ui};
 }
 test('Todos los recorridos generan contenido y escapan nombres',()=>{
@@ -63,4 +63,25 @@ test('La tarea se limita al experimento incluso si el momento solicitado es inte
 });
 test('Las gráficas SVG incluyen ejes, marcas y la frecuencia cero',()=>{
   const h=ui(),html=h.ctx.ThirtyCharts.barSVG([{value:29,count:2},{value:30,count:0},{value:31,count:3}],{step:1});assert.ok(html.includes('chart-axis'));assert.ok(html.includes('chart-zero'));assert.ok(html.includes('Tiempo registrado (segundos)'));assert.ok(html.includes('Frecuencia absoluta'));assert.ok(html.includes('30 segundos: 0'));assert.ok(html.includes('>0</text>'));
+});
+function participantView(){const h=ui(),{S,api}=h.u;api.demo();const session=api.demoCall('lookup',{code:'DEMO30'}),r=api.demoCall('register',{sessionId:session.id,registrationId:crypto.randomUUID(),participantToken:'t',profile:{name:'Prueba',group:'Grupo A'}}).participant;Object.assign(S,{route:'student',session,participant:r,participantToken:'t',phase:3,snapshot:api.demoCall('studentSnapshot',{sessionId:session.id,participantId:r.id,participantToken:'t'})});return h;}
+test('Resultados utiliza los mismos controles y cálculos que proyección, según permisos',()=>{
+ const h=participantView(),{S,render}=h.u;Object.assign(S.session.config,{showTable:true,showChart:true,showStats:true,sharedAnalysisView:'table',sharedAnalysisTrial:'2'});S.snapshot=h.u.api.demoCall('studentSnapshot',{sessionId:S.session.id,participantId:S.participant.id,participantToken:'t'});S.session.config.showTable=true;S.session.config.showChart=true;S.session.config.showStats=true;S.snapshot.analysis=h.ctx.ThirtyCore.analysisViews(h.u.api.demoCall('teacherSnapshot',{sessionId:S.session.id,token:'demo-teacher'}).attempts,S.session.config);render();const html=h.el('main').innerHTML;assert.ok(html.includes('Resultados de la sesión'));assert.ok(html.includes('Representación del análisis'));assert.ok(html.includes('data-action="analysis-view"'));assert.match(html,/data-action="analysis-trial" data-value="2" aria-pressed="true"/);assert.ok(html.includes('Cálculo del porcentaje'));assert.ok(html.includes('(4 ÷ 12) × 100'));assertMarkup(html);
+});
+test('El porcentaje y su denominador son automáticos, con fórmula visible',()=>{
+ const h=participantView(),{S,render}=h.u;h.storage.set('thirty:demo-projection-v3:draft:'+S.participant.id+':3',JSON.stringify({analysisTrial:'1',frequency:[{value:'30',count:'3',denominator:'99',percentage:'99'}]}));render();const html=h.el('main').innerHTML;assert.match(html,/data-freq="denominator"[^>]*value="12"[^>]*readonly/);assert.match(html,/data-freq="percentage"[^>]*value="25"[^>]*readonly/);assert.ok(html.includes('× 100 ='));assert.ok(html.includes('id="percentage-total">25'));assertMarkup(html);
+});
+test('El protocolo editable aparece en proyección y se comparte con el experimento sin HTML activo',()=>{
+ const h=participantView(),{S,api,render}=h.u;S.phase=2;S.session.config.agreedProtocol='Acuerdo <script>alert(1)</script>';render();assert.ok(h.el('main').innerHTML.includes('Acuerdo &lt;script&gt;'));assert.ok(!h.el('main').innerHTML.includes('<script>alert'));
+ Object.assign(S,{route:'teacher',teacherTab:'projection',projectionPhase:2,teacher:{name:'Docente'},snapshot:api.demoCall('teacherSnapshot',{sessionId:S.session.id,token:'demo-teacher'})});render();const html=h.el('main').innerHTML;assert.ok(html.includes('id="agreed-protocol"'));assert.ok(html.includes('Usar instrucciones de Autónomo'));assert.ok(!html.includes('Un protocolo común'));assertMarkup(html);
+});
+test('La consulta rápida solo pide una instantánea cuando cambian las preferencias y actualiza mientras se escribe',async()=>{
+ const h=participantView(),{S,api,watchSession}=h.u;let calls=[];const original=api.call.bind(api);api.call=async(action,payload)=>{calls.push(action);return original(action,payload);};await watchSession();assert.deepEqual(calls,['sessionStatus']);
+ const updated=api.demoCall('updateSession',{sessionId:S.session.id,token:'demo-teacher',version:S.session.version,config:{...S.session.config,unlock:2}});h.ctx.document.activeElement={matches:()=>true};calls=[];await watchSession();assert.deepEqual(calls,['sessionStatus','studentSnapshot']);assert.equal(S.session.version,updated.version);assert.ok(h.el('main').innerHTML.includes('Este momento está pendiente'));
+});
+test('Una respuesta de red antigua no revierte una habilitación más reciente',async()=>{
+ const h=participantView(),{S,api,snapshot}=h.u;const old=JSON.parse(JSON.stringify(S.snapshot));let finish;api.call=()=>new Promise(resolve=>finish=resolve);const request=snapshot(false);S.session={...S.session,version:S.session.version+1};const retained=S.snapshot;finish(old);assert.equal(await request,false);assert.equal(S.snapshot,retained);assert.equal(S.session.version,old.session.version+1);
+});
+test('Compartir otro intento carga su tabla de trabajo y no mezcla el borrador anterior',()=>{
+ const h=participantView(),{S,render}=h.u;h.storage.set('thirty:demo-projection-v3:draft:'+S.participant.id+':3',JSON.stringify({worksheets:{'1':{frequency:[{value:'22',count:'1'}]},'2':{frequency:[{value:'24',count:'1'}]}}}));render();assert.match(h.el('main').innerHTML,/data-freq="value"[^>]*value="22"/);S.session.config.sharedAnalysisTrial='2';render();assert.equal(S.analysisTrial,'2');assert.match(h.el('main').innerHTML,/data-freq="value"[^>]*value="24"/);assert.ok(!h.el('main').innerHTML.includes('data-freq="value" aria-label="Tiempo en segundos" value="22"'));
 });

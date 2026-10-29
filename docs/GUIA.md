@@ -2,7 +2,7 @@
 
 ## Actualización: segundo día corregido
 
-La versión 1.2 aplica las últimas correcciones del día 2: preguntas previas revisadas, construcción de la tabla antes de las preguntas de análisis, media automática, cálculo porcentual con espacios, totales y gráficos con ejes numéricos. La tarea permite dos intentos por persona nueva y muestra únicamente el experimento. El docente dispone de proyección para los cuatro momentos y control de acceso progresivo.
+La versión 1.3 aplica las últimas correcciones del día 2: preguntas previas revisadas, construcción de la tabla antes de las preguntas de análisis, media automática, porcentajes automáticos con la fórmula visible, totales y gráficos con ejes numéricos. La tarea permite dos intentos por persona nueva y muestra únicamente el experimento. El docente dispone de proyección para los cuatro momentos y control de acceso progresivo.
 
 El botón **Preparar tarea del día 2** abre esa modalidad y oculta los tiempos personales y las representaciones generales de Analizar. Los resultados de la tarea se conservan en **Interpretar**, para participantes del aula, con botones de primer intento, segundo intento y todos. Las personas que entran por el enlace de tarea solo reciben sus propios intentos. Las preferencias se pueden revisar en **Configurar**.
 
@@ -186,11 +186,11 @@ En el aula, los intentos interrumpidos o cancelados no consumen el cupo de inten
 
 Cierra la recolección y habilita el momento 3. Muestra primero **Datos brutos**. El estudiante completa **Construye tu tabla y tus medidas** antes de las preguntas de **Tu análisis**.
 
-La tabla tiene frecuencia absoluta, espacios para el cálculo `(fa ÷ N) × 100`, frecuencia porcentual y una fila **Total** que suma lo escrito. La media se calcula automáticamente con los datos autorizados de la selección actual; si el docente desactiva esa referencia, se calcula con la tabla propuesta. Las demás medidas mantienen espacios de respuesta. **Dibujar mi gráfico** usa la tabla propuesta y muestra ejes con sus marcas numéricas. Los datos originales no se sustituyen por las respuestas del estudiante.
+La tabla tiene frecuencia absoluta y muestra automáticamente `(fa ÷ N) × 100` y su frecuencia porcentual. El denominador es el total de la selección autorizada; si aún no hay resultados autorizados, utiliza el total de la tabla propuesta. El total porcentual se calcula sin redondear las filas. Una fila vacía o un conjunto sin datos no genera una división entre cero. La media se calcula automáticamente con los datos autorizados de la selección actual; si el docente desactiva esa referencia, se calcula con la tabla propuesta. Las demás medidas mantienen espacios de respuesta. **Dibujar mi gráfico** usa la tabla propuesta y muestra ejes con sus marcas numéricas. Los datos originales no se sustituyen por las respuestas del estudiante.
 
 Los botones **1.er intento**, **2.º intento** y **Todos los intentos** permiten cambiar la selección. Cada selección conserva su propia tabla y sus medidas propuestas. Usa **Guardar respuestas** para enviarlas al docente. Todos los intentos reúne mediciones repetidas: no equivale al número de personas.
 
-Después habilita **Tabla de frecuencias**, **Gráfico de barras** y **Medidas y comparaciones** desde Configurar, o usa los controles de Proyectar. Puedes incluir valores intermedios con frecuencia cero. La ampliación abarca el rango de los intentos autorizados y no cambia los totales ni las medidas; con más de 1000 filas posibles se muestran los valores observados y se recomienda un redondeo mayor.
+Después habilita **Tabla de frecuencias**, **Gráfico de barras** y **Medidas y comparaciones** desde Configurar, o usa los controles de Proyectar. Puedes incluir valores intermedios con frecuencia cero. La ampliación abarca el rango de la selección actual y no cambia los totales ni las medidas; con más de 1000 filas posibles se muestran los valores observados y se recomienda un redondeo mayor.
 
 **Comparar mis medidas** aparece cuando las medidas de referencia están visibles. La comparación pareada de los intentos 1 y 2 usa personas con ambos intentos válidos y muestra el cambio en el error absoluto respecto al objetivo de cada intento. Una tabla o un gráfico también revela tiempos: oculta esas representaciones si todavía habrá intentos sin retroalimentación.
 
@@ -214,10 +214,10 @@ Registrar varias mediciones bajo una sola identidad aumenta intentos, no persona
 Entra a **Portal docente → Abrir sesión → Proyectar**, o pulsa **Proyectar en clase** en el resumen.
 
 1. Usa los cuatro botones superiores para guiar Preguntar, Recolectar, Analizar e Interpretar. Cambiar la sección proyectada no modifica por sí solo lo habilitado en los dispositivos del grupo.
-2. Pulsa **Habilitar [momento] para estudiantes** para permitir el acceso hasta ese momento. Puedes regresar a un momento anterior para restringir los posteriores. Las preferencias se aplican en la siguiente actualización de cada dispositivo, aproximadamente cada 20–24 segundos.
-3. En Recolectar, abre o cierra la recepción de intentos.
+2. Pulsa **Habilitar [momento] para estudiantes** para permitir el acceso hasta ese momento. Puedes regresar a un momento anterior para restringir los posteriores. Las preferencias se aplican en la siguiente actualización de cada dispositivo, mediante una consulta ligera aproximadamente cada tres segundos, más el tiempo de respuesta de Google.
+3. En Recolectar, escribe **Protocolo del grupo** y pulsa **Guardar protocolo**, o utiliza **Usar instrucciones de Autónomo**. El texto guardado se muestra en el experimento del aula y de la tarea y se conserva en los nuevos intentos. También puedes editarlo desde Configurar. Abre o cierra la recepción de intentos cuando corresponda.
 4. En Analizar, elige **1.er intento**, **2.º intento** o **Todos los intentos**, y después **Datos brutos**, **Tabla de frecuencias**, **Gráfico** o **Medidas**. El botón de frecuencias cero incluye o excluye los valores intermedios sin observaciones.
-5. **Mostrar esta selección a estudiantes** habilita la representación proyectada y esa selección de intentos. Las otras representaciones conservan su configuración; usa Configurar para ocultarlas o habilitar varias a la vez.
+5. **Mostrar esta selección a estudiantes** habilita la representación proyectada y esa selección de intentos. Resultados de la sesión utiliza los mismos controles y abre la selección compartida. Las otras representaciones conservan su configuración; usa Configurar para ocultarlas o habilitar varias a la vez.
 6. En Interpretar puedes proyectar el QR, los resultados de tarea por intento y la comparación de la muestra ampliada.
 7. Usa **Pantalla completa** si el navegador lo permite, o proyecta directamente la vista amplia. **Salir de proyección** vuelve al portal.
 
@@ -266,6 +266,6 @@ Se revisó en un navegador la demostración: guardado y cambio entre tablas de i
 | Persona sin intentos disponibles | Revisa cupo, intentos válidos y posibles reservas pendientes |
 | Diferentes condiciones en una tabla | Filtra modalidad/fondo/procedencia y revisa la versión y el objetivo de cada intento |
 
-Las actualizaciones de datos ocurren aproximadamente cada 20–24 segundos con la pestaña visible. No son transmisión instantánea. Google Apps Script tiene cuotas; el ensayo con veinte participantes es una simulación de la lógica, no una prueba de capacidad de su infraestructura.
+Los cambios de configuración se consultan aproximadamente cada tres segundos con la pestaña visible. Los resultados completos se actualizan aproximadamente cada 20–21 segundos, o al cambiar la configuración. La demora real también depende de Google Apps Script y de la red; no es transmisión instantánea. Google Apps Script tiene cuotas; el ensayo con veinte participantes es una simulación de la lógica, no una prueba de capacidad de su infraestructura.
 
 Cuando cambies archivos del servicio, guarda una nueva versión en **Administrar implementaciones** y actualiza la implementación existente. Cuando cambies archivos de la interfaz, espera la publicación de GitHub Pages y recarga el sitio.

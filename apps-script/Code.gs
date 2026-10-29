@@ -29,7 +29,7 @@ function safeCell_(v) { if(v===null||v===undefined)return '';if(typeof v==='obje
 function put_(key,obj) {
   var s=sheet_(key),h=TS_TABLES_[key][1],row=obj._row,clean=JSON.parse(JSON.stringify(obj));delete clean._row;
   var cells=h.map(function(k){return safeCell_(k==='record_json'?JSON.stringify(clean):clean[k]);});
-  if(row)s.getRange(row,1,1,h.length).setValues([cells]);else s.appendRow(cells);return clean;
+  if(row)s.getRange(row,1,1,h.length).setValues([cells]);else s.appendRow(cells);if(key==='sessions')cacheSessionState_(clean);return clean;
 }
 function strip_(obj) { var x=JSON.parse(JSON.stringify(obj));delete x._row;delete x.tokenHash;delete x.registrationId;return x; }
 function startPublic_(a) {return {id:a.id,trial:a.trial,target:a.target,mode:a.mode,background:a.background,status:a.status,snapshot:a.snapshot};}
@@ -115,6 +115,23 @@ function login_(p,bridgeNonce) {
   cache.put('auth:'+hash_(token),JSON.stringify({id:t.id,expires:Date.now()+7200000,version:props_().getProperty('AUTH_VERSION')}),7200);
   return {token:token,teacher:{id:t.id,name:t.name}};
 }
+function cacheSessionState_(s) {
+  try {CacheService.getScriptCache().put('session-state:'+s.id,JSON.stringify(sessionPublic_(s)),21600);}catch(error){}
+}
+function sessionStatus_(p) {
+  var id=ThirtyCore.text(p.sessionId,80);ThirtyCore.assert(id,'Falta la sesión.');
+  var cache=CacheService.getScriptCache(),raw=cache.get('session-state:'+id),s;
+  if(raw){try{s=JSON.parse(raw);}catch(error){}}
+  if(!s){
+    // The same lock as preference writes prevents an older cache fill from
+    // overwriting a more recent section release during simultaneous requests.
+    var lock=LockService.getScriptLock();ThirtyCore.assert(lock.tryLock(5000),'Actualización ocupada. Vuelve a intentar.');
+    try {raw=cache.get('session-state:'+id);if(raw){try{s=JSON.parse(raw);}catch(error){}}
+      if(!s){s=sessionPublic_(find_('sessions',id));cacheSessionState_(s);}
+    } finally {lock.releaseLock();}
+  }
+  return Number(p.version)===s.version?{version:s.version,changed:false}:{version:s.version,changed:true,session:s};
+}
 function session_(p) {var s=find_('sessions',p.sessionId);s.config=ThirtyCore.config(s.config);return s;}
 function participant_(p) {
   var r=find_('participants',p.participantId);ThirtyCore.assert(r.sessionId===p.sessionId&&constantEqual_(hash_(String(p.participantToken||'')),r.tokenHash),'Acceso de participante inválido.');return r;
@@ -131,7 +148,7 @@ function register_(p,s) {
 }
 function snapshot_(s,r,isTeacher) {
   var all=rows_('attempts').filter(function(x){return x.sessionId===s.id;});
-  var participants=rows_('participants').filter(function(x){return x.sessionId===s.id;});
+  var participants=isTeacher?rows_('participants').filter(function(x){return x.sessionId===s.id;}):[];
   var answers=rows_('answers').filter(function(x){return x.sessionId===s.id;});
   if(isTeacher)return {session:sessionPublic_(s),participants:participants.map(strip_),attempts:all.map(strip_),answers:answers.map(strip_)};
   var own=all.filter(function(x){return x.participantId===r.id;}),reveal=ThirtyCore.feedbackAllowed(ThirtyCore.participantConfig(s.config,r.source),own);
@@ -155,7 +172,7 @@ function start_(p,s,r) {
   ThirtyCore.assert(c.modes.includes(p.mode),'Esta modalidad no está habilitada.');
   var requested=c.allowBackgroundChoice?p.background:c.background;ThirtyCore.assert(ThirtyCore.backgrounds.includes(requested)&&(!c.allowBackgroundChoice||c.backgroundChoices.includes(requested)),'Fondo no habilitado.');
   var actual=(p.reduceMotion&&c.respectReducedMotion)?'quiet':requested;
-  var a={id:id,sessionId:s.id,participantId:r.id,trial:used+1,elapsedMs:null,secondsRounded:null,target:c.target,mode:p.mode,background:actual,backgroundRequested:requested,source:r.source,group:r.group,gender:r.gender,status:'running',reason:'',configVersion:s.version,startedAt:now_(),finishedAt:'',snapshot:{target:c.target,toleranceLow:c.toleranceLow,toleranceHigh:c.toleranceHigh,precision:c.precision,maxSeconds:c.maxSeconds,background:actual,backgroundRequested:requested,changeMin:c.changeMin,changeMax:c.changeMax,respectReducedMotion:c.respectReducedMotion}};
+  var a={id:id,sessionId:s.id,participantId:r.id,trial:used+1,elapsedMs:null,secondsRounded:null,target:c.target,mode:p.mode,background:actual,backgroundRequested:requested,source:r.source,group:r.group,gender:r.gender,status:'running',reason:'',configVersion:s.version,startedAt:now_(),finishedAt:'',snapshot:{agreedProtocol:ThirtyCore.protocolText(c),target:c.target,toleranceLow:c.toleranceLow,toleranceHigh:c.toleranceHigh,precision:c.precision,maxSeconds:c.maxSeconds,background:actual,backgroundRequested:requested,changeMin:c.changeMin,changeMax:c.changeMax,respectReducedMotion:c.respectReducedMotion}};
   put_('attempts',a);return {attempt:startPublic_(a)};
 }
 function finish_(p,s,r) {
@@ -187,7 +204,8 @@ function dispatch(request) {
     var locked=mutations.includes(action);if(locked)ThirtyCore.assert(lock.tryLock(15000),'El servicio está ocupado. Vuelve a intentar.');
     try {
       var data;
-      if(action==='listSessions')data=rows_('sessions').map(sessionPublic_);
+      if(action==='sessionStatus')data=sessionStatus_(p);
+      else if(action==='listSessions')data=rows_('sessions').map(sessionPublic_);
       else if(action==='createSession') {
         var title=ThirtyCore.text(p.title,120);ThirtyCore.assert(title,'Escribe el nombre de la sesión.');var code;
         do {code=uuid_().replace(/-/g,'').slice(0,7).toUpperCase();}while(rows_('sessions').some(function(x){return x.code===code;}));

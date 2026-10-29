@@ -104,3 +104,15 @@ test('Se conserva una tabla de trabajo distinta para cada intento',()=>{
   h.call('saveAnswers',{...r.args,phase:3,values:{analysisTrial:'2',manual:{mean:'30,75'},frequency:[{value:'30',count:'2',denominator:'12',percentage:'16,67'}],worksheets:{'1':{manual:{mean:'31,5'},frequency:[{value:'22',count:'1',denominator:'12',percentage:'8,33'}]}}}});
   const values=h.call('teacherSnapshot',{token:h.token,sessionId:s.id}).answers[0].values;assert.equal(values.worksheets['1'].frequency[0].value,'22');assert.equal(values.worksheets['2'].frequency[0].value,'30');assert.equal(values.worksheets['2'].frequency[0].denominator,'12');
 });
+test('Consulta rápida de configuración: veinte dispositivos no releen las tablas y reciben el cambio de sección',()=>{
+  const h=harness(),s=h.create();let reads=[];const original=h.ctx.rows_;h.ctx.rows_=key=>{reads.push(key);return original(key);};
+  for(let i=0;i<20;i++)assert.deepEqual(h.call('sessionStatus',{sessionId:s.id,version:s.version}),{version:s.version,changed:false});assert.deepEqual(reads,[]);
+  const updated=h.call('updateSession',{token:h.token,sessionId:s.id,version:s.version,config:{...s.config,unlock:3,agreedProtocol:'Protocolo del grupo'}});reads=[];
+  const state=h.call('sessionStatus',{sessionId:s.id,version:s.version});assert.equal(state.session.config.unlock,3);assert.equal(state.session.config.agreedProtocol,'Protocolo del grupo');assert.equal(state.session.version,updated.version);assert.deepEqual(reads,[]);assert.ok(!('participants' in state));assert.ok(!('attempts' in state));
+  h.cache.delete('session-state:'+s.id);reads=[];h.call('sessionStatus',{sessionId:s.id,version:0});assert.deepEqual(reads,['sessions']);reads=[];h.call('sessionStatus',{sessionId:s.id,version:0});assert.deepEqual(reads,[]);
+});
+test('Cada intento conserva el protocolo acordado aunque luego cambie',()=>{
+  const h=harness(),s=h.create({unlock:2,collectionOpen:true,agreedProtocol:'Nosotros iniciamos y detenemos sin contar.'}),p=h.register(s);h.call('startAttempt',{...p.args,attemptId:crypto.randomUUID(),mode:'self',background:'quiet'});
+  h.call('updateSession',{token:h.token,sessionId:s.id,version:s.version,config:{...s.config,agreedProtocol:'Nuevo protocolo'}});
+  const snap=h.call('teacherSnapshot',{token:h.token,sessionId:s.id});assert.equal(snap.attempts[0].snapshot.agreedProtocol,'Nosotros iniciamos y detenemos sin contar.');assert.equal(snap.session.config.agreedProtocol,'Nuevo protocolo');
+});

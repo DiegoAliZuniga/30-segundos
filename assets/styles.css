@@ -13,3 +13,9 @@
 @media(prefers-color-scheme:dark){.segmented button[aria-pressed=true]{color:#111f3c}.task-qr{color:black}}
 
 html:fullscreen .topbar,html:fullscreen #environment-banner,html:fullscreen footer{display:none}html:fullscreen .projection-stage{max-width:none;min-height:100vh}.projection-stage .stat-chart{max-height:430px}
+
+/* Version 1.3: shared protocol and automatic percentage calculations. */
+.protocol-copy{white-space:pre-wrap;font-size:1.15rem;line-height:1.65;margin-bottom:0}
+.protocol-panel textarea{min-height:145px}
+.freq-edit input[readonly]{background:var(--page);font-weight:650}
+.analysis-workbench>.segmented{margin-bottom:14px}

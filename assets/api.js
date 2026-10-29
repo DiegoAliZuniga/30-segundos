@@ -57,6 +57,7 @@ var ThirtyAPI = (function () {
       if(action==='logout')return {saved:true};
       if(action==='listSessions')return copy(db.sessions);
       if(action==='lookup'){const found=db.sessions.find(x=>x.code===String(p.code||'').toUpperCase());C.assert(found,'No encontramos esa sesión. En la demostración usa DEMO30.');found.config=C.config(found.config);return copy(found);}
+      if(action==='sessionStatus'){C.assert(s,'Sesión no encontrada.');return copy(Number(p.version)===s.version?{version:s.version,changed:false}:{version:s.version,changed:true,session:{...s,config:C.config(s.config)}});}
       if(action==='createSession'){const x={id:id(),code:id().slice(0,7).toUpperCase(),title:C.text(p.title,120),config:C.config(p.config||{}),version:1,updatedAt:new Date().toISOString()};C.assert(x.title,'Escribe el nombre de la sesión.');db.sessions.push(x);data=x;}
       else {
         C.assert(s,'Sesión no encontrada.');s.config=C.config(s.config);
@@ -82,7 +83,7 @@ var ThirtyAPI = (function () {
             C.assert(!own.some(x=>x.status==='running'),'Ya hay un intento en curso.');const used=C.usedAttempts(own,r.source);C.assert(used<pc.attempts,'Ya completaste los intentos.');C.assert(c.modes.includes(p.mode),'Modalidad no habilitada.');
             const requested=c.allowBackgroundChoice?p.background:c.background;C.assert(C.backgrounds.includes(requested)&&(!c.allowBackgroundChoice||c.backgroundChoices.includes(requested)),'Fondo no habilitado.');
             const background=p.reduceMotion&&c.respectReducedMotion?'quiet':requested;
-            const a={id:p.attemptId,sessionId:s.id,participantId:r.id,trial:used+1,target:c.target,mode:p.mode,background,backgroundRequested:requested,source:r.source,group:r.group,gender:r.gender,status:'running',reason:'',configVersion:s.version,startedAt:new Date().toISOString(),snapshot:{target:c.target,toleranceLow:c.toleranceLow,toleranceHigh:c.toleranceHigh,precision:c.precision,maxSeconds:c.maxSeconds,background,changeMin:c.changeMin,changeMax:c.changeMax}};db.attempts.push(a);data={attempt:a};
+            const a={id:p.attemptId,sessionId:s.id,participantId:r.id,trial:used+1,target:c.target,mode:p.mode,background,backgroundRequested:requested,source:r.source,group:r.group,gender:r.gender,status:'running',reason:'',configVersion:s.version,startedAt:new Date().toISOString(),snapshot:{agreedProtocol:C.protocolText(c),target:c.target,toleranceLow:c.toleranceLow,toleranceHigh:c.toleranceHigh,precision:c.precision,maxSeconds:c.maxSeconds,background,changeMin:c.changeMin,changeMax:c.changeMax}};db.attempts.push(a);data={attempt:a};
           } else if(action==='finishAttempt') {
             const a=own.find(x=>x.id===p.attemptId);C.assert(a,'Intento no encontrado.');if(a.status==='running'){a.elapsedMs=Math.round(C.number(p.elapsedMs,1,(a.snapshot.maxSeconds+1)*1000,'Tiempo'));a.secondsRounded=C.round(a.elapsedMs/1000,a.snapshot.precision);a.status=p.interrupted?'invalid':'valid';a.reason=p.interrupted?(p.reason||'Interrumpido'):'';a.finishedAt=new Date().toISOString();a.changes=p.changes||0;}data={saved:true,id:a.id,status:a.status};
           } else if(action==='cancelAttempt'){const a=own.find(x=>x.id===p.attemptId);C.assert(a,'Intento no encontrado.');if(a.status==='running'){a.status='invalid';a.reason=p.reason||'Cancelado';}data={saved:true};}

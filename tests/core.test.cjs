@@ -31,3 +31,10 @@ test('La selección de intentos no revela extremos de un intento oculto',()=>{
 test('Las sesiones anteriores reciben las correcciones sin perder preguntas personalizadas',()=>{
   const old=C.defaults();delete old.schemaVersion;old.homeAttempts=1;old.questions[1].push(['question2','Escribe otra pregunta investigativa sobre el mismo tema.']);old.questions[2].push(['method','¿Qué datos obtuvimos por observación y medición? ¿Qué información obtuvimos por interrogación al preguntar las predicciones? ¿En qué se diferencian?'],['custom','Pregunta propia del docente']);const updated=C.config(old);assert.equal(updated.homeAttempts,2);assert.equal(updated.questions[1].length,5);assert.ok(!updated.questions[2].some(q=>q[0]==='method'));assert.ok(updated.questions[2].some(q=>q[0]==='custom'));
 });
+test('El protocolo compartido es editable y utiliza la instrucción autónoma cuando está vacío',()=>{
+  const c=C.config({agreedProtocol:'  Cada persona inicia y detiene sin mirar un reloj.  '});assert.equal(C.protocolText(c),'Cada persona inicia y detiene sin mirar un reloj.');assert.equal(C.protocolText(C.defaults()),C.autonomousInstructions());assert.equal(C.config({agreedProtocol:'x'.repeat(4000)}).agreedProtocol.length,3000);
+});
+test('Los porcentajes automáticos usan el total autorizado y no dividen entre cero',()=>{
+  const work=C.frequencyWork([{value:'27',count:'2',percentage:'99'},{value:'28',count:'0'},{value:'30',count:'10'}],12);assert.ok(Math.abs(Number(work.rows[0].percentage)-100/6)<1e-10);assert.equal(work.rows[1].percentage,'0');assert.equal(work.percentage,100);assert.equal(work.rows[0].denominator,'12');assert.equal(C.frequencyWork([{value:'30',count:''}],12).rows[0].percentage,'');assert.equal(C.frequencyWork([{value:'30',count:'0'}],0).percentage,null);assert.equal(C.frequencyWork([{value:'30',count:'0'}],0).rows[0].percentage,'');
+  const partial=C.frequencyWork([{value:'30',count:'3'}],12);assert.equal(partial.percentage,25);assert.equal(C.frequencyWork([{value:'30',count:'3'}]).percentage,100);
+});

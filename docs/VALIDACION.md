@@ -2,7 +2,7 @@
 
 ## Resultado automatizado
 
-**43 pruebas aprobadas** con Node.js. Sin dependencias externas para ejecutar los tests.
+**53 pruebas aprobadas** con Node.js. Sin dependencias externas para ejecutar los tests.
 
 | Área | Comprobación |
 | --- | --- |
@@ -37,6 +37,17 @@ Los servicios Google se sustituyen por dobles de prueba en memoria. La verificac
 
 ## Pendiente tras instalar
 
-No se ha creado un repositorio de GitHub, publicado Pages, desplegado Apps Script ni escrito en la hoja real. Se verificaron los recorridos descritos en la demostración local con datos ficticios. No se ha realizado un ensayo de carga contra Google ni una revisión a todos los tamaños y dispositivos previstos. La guía incluye un piloto concreto para validar esos puntos.
+La revisión 1.3 se validó con pruebas automáticas y una demostración local. No se escribieron datos en la hoja real durante esas pruebas. Se verificaron los recorridos descritos en la demostración local con datos ficticios. No se ha realizado un ensayo de carga contra Google ni una revisión a todos los tamaños y dispositivos previstos. La guía incluye un piloto concreto para validar esos puntos.
 
 El HTML de demostración es una copia autosuficiente de la interfaz con modo local activo. Sus cambios no se guardan en Google Sheets. El ZIP contiene el proyecto que debe instalarse para disponer de registros compartidos.
+
+## Comprobación específica de la versión 1.3
+
+- Porcentajes automáticos, ceros, datos incompletos, denominador de la selección y ausencia de división entre cero.
+- Protocolo editable, alternativa de Autónomo y conservación de su texto en cada nuevo intento.
+- Veinte consultas de configuración con caché caliente sin lecturas de hojas; invalidación inmediata al guardar preferencias y recuperación tras la expulsión de caché.
+- Respuestas de red antiguas no revierten una configuración más reciente.
+- La actualización de permisos funciona mientras hay campos activos y conserva tablas distintas por intento.
+- Revisión de navegador: protocolo compartido, cambio de representación desde proyección, fórmula y porcentaje automáticos en la tabla del estudiante.
+
+Estas pruebas no miden la latencia del servicio real de Google ni constituyen una prueba de carga de veinte navegadores. Para usar la optimización hay que actualizar también los dos archivos de Apps Script.

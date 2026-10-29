@@ -1,4 +1,4 @@
-# Ajustes del segundo día · versión 1.2
+# Ajustes del segundo día · versión 1.3
 
 Esta revisión aplica las correcciones más recientes sobre el día 2 de `Planeamiento MA-0024.md`. Conserva los cuatro momentos GAISE II y la organización de repaso, investigación y cierre/tarea. No modifica los días 1 y 3.
 
@@ -21,7 +21,7 @@ Se elimina la pregunta que compara observación/medición e interrogación. Las 
 - **Construye tu tabla y tus medidas** aparece antes de **Tu análisis**.
 - Se elimina la pregunta «¿Cuánto suman las frecuencias absolutas y las porcentuales? ¿Qué porcentaje representa cada estimación?».
 - La media es automática. Las demás medidas conservan sus espacios de respuesta. Se retira «(opcional)» de esta sección.
-- Cada fila incluye frecuencia absoluta, espacios `(fa ÷ N) × 100` y frecuencia porcentual. La fila **Total** suma las frecuencias absolutas y los porcentajes escritos; el total teórico de la tabla automática es 100 % cuando hay datos.
+- Cada fila incluye frecuencia absoluta, cálculo `(fa ÷ N) × 100` y frecuencia porcentual automática. La fila **Total** usa los cálculos sin redondear.
 - La tabla propuesta y sus medidas se conservan por separado para el primer intento, el segundo y todos. El docente puede consultar ese trabajo.
 - **Dibujar mi gráfico** genera ejes y marcas numéricas a partir de la tabla propuesta. Las representaciones automáticas también muestran ejes y frecuencias cero.
 - Docente y estudiantes pueden alternar primer intento, segundo intento y todos, según los permisos establecidos. Incluir ceros no cambia los totales ni las medidas.
@@ -45,8 +45,12 @@ En Analizar se proyectan datos, tabla, gráfico o medidas del primer intento, se
 
 Las sesiones de la versión anterior reciben las preguntas corregidas y los dos intentos de tarea, sin retirar preguntas personalizadas del docente. Las respuestas guardadas conservan su historial de preguntas y versión. Los códigos internos, condiciones por intento, revisión docente y exportaciones se mantienen.
 
-Se aprobaron **43 pruebas automáticas**. Se comprobó la demostración en navegador, incluido el bloqueo del tercer intento de tarea, el guardado de tablas por intento y la proyección. Dos QR se leyeron con un decodificador independiente. La pantalla completa depende del navegador; la vista de proyección funciona sin ella.
+Se aprobaron **53 pruebas automáticas**. Se comprobó la demostración en navegador, incluido el bloqueo del tercer intento de tarea, el guardado de tablas por intento y la proyección. Dos QR se leyeron con un decodificador independiente. La pantalla completa depende del navegador; la vista de proyección funciona sin ella.
 
-El proyecto está preparado para GitHub Pages y Apps Script, pero no está publicado ni conectado al servicio real. No se escribieron datos en la hoja proporcionada. La guía incluye instalación y piloto con los dispositivos del grupo.
+Esta revisión se validó localmente. Para activarla, actualiza GitHub Pages y la implementación existente de Apps Script. Durante las pruebas no se escribieron datos en la hoja proporcionada. La guía incluye el piloto con los dispositivos del grupo.
 
 La confirmación de primera participación no puede detectar automáticamente que una misma persona se registra desde otro dispositivo. El estudiante que administra la tarea debe evitar duplicados. Una muestra mayor no garantiza representatividad.
+
+## Corrección adicional de protocolo, resultados y latencia
+
+El protocolo común ahora es editable y puede utilizar las instrucciones de Autónomo. Los porcentajes se muestran automáticamente con su cálculo. Resultados de la sesión, Resultados docente y Proyección comparten la representación y los controles de intentos. Las preferencias se consultan en una petición ligera aproximadamente cada tres segundos; la lectura completa de resultados mantiene una frecuencia menor. La demora real del despliegue depende también de la red y de Google.

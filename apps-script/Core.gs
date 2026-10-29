@@ -35,6 +35,7 @@ var ThirtyCore = (function () {
       unlock: 1, collectionOpen: false, allowHome: false,
       homeAnonymous: true, homeAttempts: 2, showEvaluation: true,
       includeZero: true, showAutoMean: true,
+      agreedProtocol: '', sharedAnalysisTrial: '1', sharedAnalysisView: 'raw',
       studentTrials: ['1','2','all'],
       showTaskResults: true,
       target: 30, attempts: 1, maxSeconds: 120, precision: 1,
@@ -112,6 +113,9 @@ var ThirtyCore = (function () {
       return {id, label, type:f.type, required:!!f.required, options:f.type === 'select' ? list(f.options, 20, label) : []};
     });
     assert(new Set(c.extraFields.map(f => f.id)).size === c.extraFields.length, 'Identificadores de campos repetidos.');
+    c.agreedProtocol = text(c.agreedProtocol,3000);
+    c.sharedAnalysisTrial=String(c.sharedAnalysisTrial);assert(c.sharedAnalysisTrial==='all'||/^(10|[1-9])$/.test(c.sharedAnalysisTrial),'Intento compartido inválido.');
+    assert(['raw','table','chart','stats'].includes(c.sharedAnalysisView),'Representación compartida inválida.');
     c.question = text(c.question, 500); assert(c.question, 'Falta la pregunta investigativa.');
     const q = {};
     for (let i=1;i<=4;i++) {
@@ -120,6 +124,18 @@ var ThirtyCore = (function () {
       assert(new Set(q[i].map(x=>x[0])).size===q[i].length,'Identificadores de preguntas repetidos.');
     }
     c.questions=q; return c;
+  }
+  function autonomousInstructions() { return 'Inicia cuando estés listo. Detén la medición cuando estimes el tiempo.'; }
+  function protocolText(c) { return text(c.agreedProtocol,3000) || autonomousInstructions(); }
+  function frequencyWork(rows,total) {
+    const proposed=proposedSummary(rows),n=total==null?proposed.n:Number(total);
+    const validTotal=Number.isFinite(n)&&n>0;
+    const result=rows.map(row=>{
+      const raw=String(row.count??'').trim(),count=Number(raw.replace(',','.'));
+      const valid=raw!==''&&Number.isInteger(count)&&count>=0;
+      return {...row,denominator:validTotal?String(n):'',percentage:valid&&validTotal?String(count/n*100):''};
+    });
+    return {rows:result,n,percentage:validTotal&&proposed.n!=null?proposed.n/n*100:null};
   }
   function participantConfig(c, source) {
     const out=Object.assign({},c);
@@ -206,15 +222,13 @@ var ThirtyCore = (function () {
   function analysisViews(records,c) {
     const auto=c.showAutoMean!==false&&c.unlock>=3;
     if(!(c.showRaw||c.showTable||c.showChart||c.showStats||auto))return [];
-    const valid=select(records,{trial:'all'}),allowed=c.studentTrials||['1','2','all'];
-    const visible=allowed.includes('all')?valid:valid.filter(r=>allowed.includes(String(r.trial)));
-    const global=summarize(visible,c),domain={min:global.min,max:global.max};
+    const valid=select(records,{trial:'all'});
     const trials=Array.from(new Set(['1','2','all',...valid.map(r=>String(r.trial))])).filter(v=>(c.studentTrials||['1','2','all']).includes(v));
     return trials.map(trial=>{
       const selected=select(valid,{trial}),sum=summarize(selected,c),entry={trial,n:sum.n,unique:sum.unique,comparisons:{}};
       if(auto)entry.mean=sum.mean;
       if(c.showRaw)entry.raw=selected.map(r=>({seconds:round(r.elapsedMs/1000,c.precision),trial:r.trial,group:r.group}));
-      if(c.showTable||c.showChart){const expanded=c.includeZero===false?{table:sum.table,complete:false}:expandFrequencies(sum.table,c.precision,domain);entry.table=expanded.table;entry.zeroComplete=expanded.complete;}
+      if(c.showTable||c.showChart){const expanded=c.includeZero===false?{table:sum.table,complete:false}:expandFrequencies(sum.table,c.precision,{min:sum.min,max:sum.max});entry.table=expanded.table;entry.zeroComplete=expanded.complete;}
       if(c.showStats){entry.stats=Object.assign({},sum);delete entry.stats.values;delete entry.stats.table;
         c.comparison.filter(k=>k!=='trial').forEach(k=>{entry.comparisons[k]=Array.from(new Set(selected.map(r=>r[k]||'Sin respuesta'))).map(value=>{const stats=summarize(selected.filter(r=>(r[k]||'Sin respuesta')===value),c);delete stats.values;delete stats.table;return {value,stats};});});
       }
@@ -236,6 +250,6 @@ var ThirtyCore = (function () {
     function cell(v) { let x=String(v==null?'':v); if (/^[\s]*[=+@-]/.test(x)) x="'"+x; return '"'+x.replace(/"/g,'""')+'"'; }
     return '\ufeff'+[cols.map(cell).join(','),...rows.map(r=>cols.map(k=>cell(r[k])).join(','))].join('\r\n');
   }
-  return {defaults,config,profile,participantConfig,usedAttempts,cleanLearningValues,summarize,select,expandFrequencies,analysisViews,proposedSummary,round,feedbackAllowed,escapeHTML,csv,assert,uuid,text,number,modes,backgrounds,phaseQuestions};
+  return {defaults,config,profile,participantConfig,usedAttempts,cleanLearningValues,summarize,select,expandFrequencies,analysisViews,proposedSummary,round,feedbackAllowed,escapeHTML,csv,assert,uuid,text,number,modes,backgrounds,phaseQuestions, autonomousInstructions, protocolText, frequencyWork};
 })();
 if (typeof module !== 'undefined' && module.exports) module.exports = ThirtyCore;
